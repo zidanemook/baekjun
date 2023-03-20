@@ -5,60 +5,57 @@ import java.util.*;
 
 class Meeting implements Comparable<Meeting>
 {
-    int start;
-    int end;
+    int st;
+    int ed;
 
-    public Meeting(int start, int end) {
-        this.start = start;
-        this.end = end;
+    public Meeting(int st, int ed) {
+        this.st = st;
+        this.ed = ed;
     }
 
     @Override
-    public int compareTo(Meeting o) {
-        if(this.end != o.end)
-            return (this.end < o.end) ? -1:1;
-        else
-            return (this.start <= o.start) ? -1:1;
+    public int compareTo(Meeting o)
+    {
+        if(this.st != o.st)
+            return this.st - o.st < 0 ? -1:1;
+        else {
+            return this.ed - o.ed < 0 ? -1:1;
+        }
     }
 }
 
 public class Main
 {
-    static BufferedReader br;
-
-    static int N;
-
-    static Meeting[] arr;
-
-    static Stack<Meeting> stack = new Stack<>();
-
     public static void main(String[] args) throws IOException
     {
-        br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        N = Integer.parseInt(br.readLine());
-        arr = new Meeting[N];
-
+        int N = Integer.parseInt(br.readLine());//1~100000
         String[] input;
+
+        PriorityQueue<Meeting> pq = new PriorityQueue<>();
 
         for(int i = 0; i < N; ++i)
         {
             input = br.readLine().split(" ");
 
-            arr[i] = new Meeting(Integer.parseInt(input[0]), Integer.parseInt(input[1]));
+            int st = Integer.parseInt(input[0]);// 0 ~ 2^31-1
+            int ed = Integer.parseInt(input[1]);
+
+            pq.add(new Meeting(st, ed));
         }
 
-        Arrays.sort(arr);
-
-        stack.push(arr[0]);
-        for(int i = 1; i < arr.length; ++i)
+        int end = 0;
+        int ans = 0;
+        while(pq.isEmpty() == false)
         {
-            if(stack.peek().end > arr[i].start)
-                continue;
-
-            stack.push(arr[i]);
+            Meeting cur = pq.poll();
+            if(cur.st >= end)
+            {
+                ans++;
+                end = cur.ed;
+            }
         }
-
-        System.out.println(stack.size());
+        System.out.println(ans);
     }
 }
