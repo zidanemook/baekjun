@@ -1,69 +1,70 @@
 package N과M5_15654;
 
 import java.io.*;
-import java.util.Arrays;
+import java.util.*;
 
 public class Main {
 
-    static int N;
-    static int M;
-
-    static int[] inputArr;
-    static int[] arr;
-    static boolean[] checked;
-
+    static int N;//1~8
+    static int M;//1~8
+    static Integer[] arr;
+    static ArrayList<String> answer = new ArrayList<>();
     static StringBuilder sb = new StringBuilder();
 
-    public static void main(String[] args)throws IOException
-    {
+    //static int count = 0; //testcode
+
+    public static void main(String[] args) throws IOException{
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String[] input;
-        input = br.readLine().split(" ");
+        String[] input = br.readLine().split(" ");
 
         N = Integer.parseInt(input[0]);
         M = Integer.parseInt(input[1]);
 
-        inputArr = new int[N];
-        arr = new int[M];
-        checked = new boolean[N];
-
         input = br.readLine().split(" ");
-        for(int i = 0; i < N; ++i)
-        {
-            inputArr[i] = Integer.parseInt(input[i]);
+
+        ArrayList<Integer> arrInput = new ArrayList<>();
+        for(int i = 0; i < N; ++i){
+            arrInput.add(Integer.parseInt(input[i]));
         }
 
-        Arrays.sort(inputArr);
+        Collections.sort(arrInput);
+        boolean visit[] = new boolean[N];
+        arr = new Integer[M];
 
-        search(0);
+        dfs(0, arrInput, visit);
 
-        System.out.println(sb);
+        answer.stream().forEach( (s)->{
+            System.out.println(s);
+        });
     }
 
-    static void search(int depth)
-    {
-        if(depth == M)
-        {
-            for(int i = 0; i < arr.length; ++i)
-            {
-                if(i != arr.length-1)
-                    sb.append((arr[i]) + " ");
+    public static void dfs(int depth, ArrayList<Integer> arrInput, boolean visit[]){
+
+        //count++;
+
+        sb.setLength(0);
+        if(depth == M){
+            for (int i = 0; i < arr.length; ++i) {
+                if(i == arr.length - 1)
+                    sb.append(arr[i]);
                 else
-                    sb.append((arr[i]) + "\n");
+                    sb.append(arr[i] + " ");
             }
+
+            answer.add(sb.toString());
+
             return;
         }
 
-        for(int i = 0; i < N; ++i)
-        {
-            if(checked[i] == false)
-            {
-                checked[i] = true;
-                arr[depth] = inputArr[i];
-                search(depth+1);
-                checked[i] = false;
+        for(int i = 0; i < N; ++i){
+
+            if(visit[i] == false){
+                arr[depth] = arrInput.get(i);
+                visit[i] = true;
+                dfs(depth+1, arrInput, visit);
+                visit[i] = false;
             }
         }
     }
