@@ -5,68 +5,32 @@ import java.util.*;
 
 public class Main
 {
-    public static void main(String[] args) throws IOException
-    {
+    public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
         int t = Integer.parseInt(br.readLine());
-
-        TreeSet<String> tree = new TreeSet<>();
-        StringBuilder sb = new StringBuilder();
-
-        StringBuilder ans = new StringBuilder();
-
-        for(int i = 0; i < t; ++i)
-        {
-            tree.clear();
+        for (int i = 0; i < t; i++) {
             int n = Integer.parseInt(br.readLine());
+            String[] arrstr = new String[n];
 
-            for(int j = 0; j < n; ++j)
-            {
-                tree.add(br.readLine());
+            for (int j = 0; j < n; j++) {
+                arrstr[j] = br.readLine();
             }
 
-            boolean same = false;
-            for(String el : tree)
-            {
-                if(sb.length() != 0)
-                {
-                    if(sb.length() >= el.length())
-                    {
-                        sb.setLength(el.length());
-                        if(sb.toString().equals(el))
-                        {
-                            same = true;
-                            break;
-                        }
+            Arrays.sort(arrstr);
 
-                    }
-                    else
-                    {
-                        if(sb.toString().equals(el.substring(0, sb.length())))
-                        {
-                            same = true;
-                            break;
-                        }
-                    }
+            boolean No = false;
+            for (int j = 0; j < n; j++) {
+
+                if((j+1) < n && arrstr[j+1].indexOf(arrstr[j]) == 0){
+                    No = true;
+                    break;
                 }
-
-                sb.setLength(0);
-                sb.append(el);
             }
-
-            sb.setLength(0);
-
-            if(same == false)
-            {
-                ans.append("YES\n");
-            }
+            if(No)
+                System.out.println("NO");
             else
-            {
-                ans.append("NO\n");
-            }
+                System.out.println("YES");
         }
-
-        System.out.println(ans);
     }
 }
