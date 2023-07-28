@@ -13,44 +13,41 @@ public class Main
         int[] arr = new int[N];
 
         String[] input = br.readLine().split(" ");
-
-        for(int i = 0; i < N; ++i)
-        {
+        for (int i = 0; i < N; i++) {
             arr[i] = Integer.parseInt(input[i]);
         }
 
         Arrays.sort(arr);
 
-        int l = 0;
-        int r = N-1;
-        long sum = arr[l]+arr[r];
-        int[] ans = new int[2];
-        ans[0] = arr[l];
-        ans[1] = arr[r];
-        long newSum = 0;
-        while(true)
-        {
-            newSum = arr[l]+arr[r];
-            if(Math.abs(sum) > Math.abs(newSum))
-            {
-                sum = newSum;
-                ans[0] = arr[l];
-                ans[1] = arr[r];
+        int left = 0;
+        int right = N-1;
+
+        int bestvalue = Integer.MAX_VALUE;
+        int bestleft = 0;
+        int bestright = 0;
+        while(left < right){
+
+            int sum = arr[left] + arr[right];
+
+            if(Math.abs(sum) < bestvalue){
+                bestvalue = Math.abs(sum);
+                bestleft = left;
+                bestright = right;
             }
 
-            if(0 <= newSum)
-            {
-                r--;
-            }
-            else //0 > newSum
-            {
-                l++;
-            }
 
-            if(l >= r)
+
+            if( sum > 0){
+                right--;
+            }else if(sum < 0){
+                left++;
+            }else{
+                bestleft = left;
+                bestright = right;
                 break;
+            }
         }
 
-        System.out.print(ans[0] + " " + ans[1]);
+        System.out.println(arr[bestleft] + " " + arr[bestright]);
     }
 }
